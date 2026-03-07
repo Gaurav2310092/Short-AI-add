@@ -1,0 +1,36 @@
+# --- Dependencies ---
+# Ignores all node_modules in root, backend, and front-end
+node_modules/
+**/node_modules/
+
+# --- Environment Variables (CRITICAL) ---
+# Protects your Gemini API, Cloudinary, and MongoDB keys
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+backend/.env
+front-end/.env
+
+# --- Production Builds ---
+# Prevents uploading compiled code
+dist/
+build/
+front-end/dist/
+front-end/build/
+
+# --- AI & Media ---
+# Since you use Cloudinary, ignore any local test files or logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+videos/
+images/
+
+# --- OS & Editor Junk ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
