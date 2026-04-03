@@ -7,11 +7,14 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "node index.js",
+    "dev":"nodemon index.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   },
   "dependencies": {
     "@clerk/express": "^1.7.76",
-    "@clerk/nextjs": "^6.39.0",
     "@google/genai": "^1.44.0",
     "@google/generative-ai": "^0.24.1",
     "@sentry/node": "^10.40.0",

@@ -4,7 +4,7 @@ const { User } = require("../models/user");
 const clerkwebHooks = async (req, res) => {
     try {
         const evt = await verifyWebhook(req, {
-            signingSecret: process.env.CLERK_WEBHOOK_SECRET
+            signingSecret: process.env.CLERK_WEBHOOK_SIGNING_SECRET
         });
 
         console.log("Webhook received");

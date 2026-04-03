@@ -4,27 +4,29 @@ const Sentry = require("@sentry/node");
 const express=require("express");
 const cors=require("cors");
 const { connectToMongoDB } = require("./connection");
-
-const { User } = require("./models/user"); // adjust path
 const { clerkMiddleware } = require('@clerk/express');
-const {protect} = require('./middleware/auth');
-const app=express();
 const {clerkwebHooks}=require('./controllers/clerk');
 const userRouter = require("./routes/userRoutes.js");
 const projectRouter = require("./routes/projectRoutes.js");
 
 
 //MongoDB Connection 
-connectToMongoDB('mongodb://127.0.0.1:27017/short-add')
-    .then(()=> console.log("MongoDB is Connected."));
+connectToMongoDB(process.env.MONGODB_URI)
+  .then(() => console.log("MongoDB Connected"))
+  .catch(err => {
+    console.error("MongoDB connection failed:", err);
+    process.exit(1);
+  });
 
+
+  const app=express();
 
 //Middleware
-app.use(cors());
+app.use(cors({
+    origin:process.env.CLIENT_URL
+}));
 
 app.post('/api/clerk',express.raw({ type: 'application/json' }),clerkwebHooks)
-
-
 
 app.use(express.json());
 app.use(clerkMiddleware());
@@ -42,8 +44,9 @@ app.use("/api/project",projectRouter);
 // The error handler must be registered before any other error middleware and after all controllers
 Sentry.setupExpressErrorHandler(app);
 
-const PORT=process.env.PORT || 3000;
+app.use((err,req,res,next)=>{
+    console.error(err.stack);
+    res.status(err.status || 500).json({message:err.message || 'Internal Server Error '});
+});
 
-app.listen(PORT,()=>{
-    console.log(`Server is at http://localhost:${PORT}`)
-})
+module.exports=app;
