@@ -3,25 +3,25 @@ const { User } = require("../models/user");
 
 const clerkwebHooks = async (req, res) => {
     try {
+        const signingSecret = process.env.CLERK_WEBHOOK_SIGNING_SECRET;
+
+        if (!signingSecret) {
+            console.error("Missing CLERK_WEBHOOK_SIGNING_SECRET");
+            return res.status(500).json({ message: "Server configuration error" });
+        }
+
+        // verifyWebhook handles the svix-id, timestamp, and signature headers for you
+        // BUT it needs the raw body (req.body should be a Buffer/String)
         const evt = await verifyWebhook(req, {
-            signingSecret: process.env.CLERK_WEBHOOK_SIGNING_SECRET
+            signingSecret: signingSecret
         });
 
-        console.log("Webhook received");
-        console.log("Event:", evt.type);
-        console.log("Data:", evt.data);
-
-        const data = evt.data;
-        const type = evt.type;
+        const { data, type } = evt;
 
         switch (type) {
 
             // USER CREATED
             case "user.created": {
-                if (!data?.id) {
-                    return res.status(400).json({ message: "Missing Clerk ID" });
-                }
-
                 await User.findOneAndUpdate(
                     { clerkId: data.id },
                     {
