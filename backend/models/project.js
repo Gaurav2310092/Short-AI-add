@@ -1,5 +1,4 @@
 const mongoose=require("mongoose");
-const { string } = require("prop-types");
 
 const projectScema=new mongoose.Schema({
     name:{
