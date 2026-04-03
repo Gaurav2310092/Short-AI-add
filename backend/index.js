@@ -20,6 +20,16 @@ connectToMongoDB(process.env.MONGODB_URI)
 
   const app=express();
 
+  app.get("/api/test", (req, res) => {
+  res.json({
+    mongodb: process.env.MONGODB_URI ? "✅ Found" : "❌ Missing",
+    clerk_secret: process.env.CLERK_SECRET_KEY ? "✅ Found" : "❌ Missing",
+    clerk_webhook: process.env.CLERK_WEBHOOK_SIGNING_SECRET ? "✅ Found" : "❌ Missing",
+    cloudinary: process.env.CLOUDINARY_URL ? "✅ Found" : "❌ Missing",
+    gemini: process.env.GEMINI_API_KEY ? "✅ Found" : "❌ Missing",
+  });
+});
+
 //Middleware
 app.use(cors({
     origin:process.env.CLIENT_URL
