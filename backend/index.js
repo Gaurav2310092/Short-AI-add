@@ -1,6 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const { connectToMongoDB } = require("./connection");
+const { clerkMiddleware } = require('@clerk/express');
+const { clerkwebHooks } = require('./controllers/clerk');
 const app = express();
 
 app.get("/api/test", (req, res) => {
