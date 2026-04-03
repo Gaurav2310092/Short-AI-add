@@ -1,4 +1,4 @@
-require("dotenv").config();
+
 const {instrument} =require("./config/instrument.js");
 const Sentry = require("@sentry/node");
 const express=require("express");
@@ -25,6 +25,15 @@ connectToMongoDB(process.env.MONGODB_URI)
 app.use(cors({
     origin:process.env.CLIENT_URL
 }));
+
+// Add this route before your other routes
+app.get("/api/test", (req, res) => {
+  res.json({
+    mongodb_uri: process.env.MONGODB_URI ? "✅ Found" : "❌ Missing",
+    client_url: process.env.CLIENT_URL ? "✅ Found" : "❌ Missing",
+    clerk_key: process.env.CLERK_SECRET_KEY ? "✅ Found" : "❌ Missing",
+  });
+});
 
 app.post('/api/clerk',express.raw({ type: 'application/json' }),clerkwebHooks)
 
