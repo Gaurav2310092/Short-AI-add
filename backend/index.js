@@ -1,3 +1,5 @@
+const { instrument } = require("./config/instrument.js");
+const Sentry = require("@sentry/node");
 const express = require("express");
 const cors = require("cors");
 const { connectToMongoDB } = require("./connection");
