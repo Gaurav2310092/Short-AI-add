@@ -8,31 +8,17 @@ const {clerkwebHooks}=require('./controllers/clerk');
 const userRouter = require("./routes/userRoutes.js");
 const projectRouter = require("./routes/projectRoutes.js");
 
+const app=express();
 
 //MongoDB Connection 
-connectToMongoDB(process.env.MONGODB_URI)
-  .then(() => console.log("MongoDB Connected"))
-  .catch(err => {
-    console.error("MongoDB connection failed:", err);
-    process.exit(1);
-  });
-
-
-  const app=express();
-
-  app.get("/api/test", (req, res) => {
-  res.json({
-    mongodb: process.env.MONGODB_URI ? "✅ Found" : "❌ Missing",
-    clerk_secret: process.env.CLERK_SECRET_KEY ? "✅ Found" : "❌ Missing",
-    clerk_webhook: process.env.CLERK_WEBHOOK_SIGNING_SECRET ? "✅ Found" : "❌ Missing",
-    cloudinary: process.env.CLOUDINARY_URL ? "✅ Found" : "❌ Missing",
-    gemini: process.env.GEMINI_API_KEY ? "✅ Found" : "❌ Missing",
-  });
-});
+connectToMongoDB(process.env.MONGODB_URI);
 
 //Middleware
 app.use(cors({
-    origin:process.env.CLIENT_URL
+    origin:[process.env.CLIENT_URL,"https://localhots:5173"],
+    credentials:true,
+    methods:["GET","POST","PUT","DELETE"],
+    allowedHeaders:["Content-Type","Authorization"]
 }));
 
 app.post('/api/clerk',express.raw({ type: 'application/json' }),clerkwebHooks)
@@ -40,6 +26,14 @@ app.post('/api/clerk',express.raw({ type: 'application/json' }),clerkwebHooks)
 app.use(express.json());
 app.use(clerkMiddleware());
 
+app.get("/api/test", (req, res) => {
+  res.json({
+    status: "✅ Working",
+    mongodb: process.env.MONGODB_URI ? "✅ Found" : "❌ Missing",
+    clerk_secret: process.env.CLERK_SECRET_KEY ? "✅ Found" : "❌ Missing",
+    client_url: process.env.CLIENT_URL || "❌ Not Set",
+  });
+});
 
 app.get("/debug-sentry", function mainHandler(req, res) {
   throw new Error("My first Sentry error!");
@@ -55,7 +49,7 @@ Sentry.setupExpressErrorHandler(app);
 
 app.use((err,req,res,next)=>{
     console.error(err.stack);
-    res.status(err.status || 500).json({message:err.message || 'Internal Server Error '});
+    res.status(err.status || 500).json({success:false,message:err.message || 'Internal Server Error '});
 });
 
 module.exports=app;
