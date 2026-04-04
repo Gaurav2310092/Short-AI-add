@@ -3,6 +3,14 @@ const { User } = require("../models/user");
 
 const clerkwebHooks = async (req, res) => {
     try {
+
+        console.log("👉 Webhook HIT");
+
+        // 🔍 DEBUG START
+        console.log("Headers:", req.headers);
+        console.log("Body type:", typeof req.body);
+        console.log("Raw body:", req.body);
+        // 🔍 DEBUG END
         const signingSecret = process.env.CLERK_WEBHOOK_SIGNING_SECRET;
 
         if (!signingSecret) {
