@@ -15,7 +15,7 @@ connectToMongoDB(process.env.MONGODB_URI);
 
 //Middleware
 app.use(cors({
-    origin:[process.env.CLIENT_URL,"https://localhots:5173"],
+    origin:[process.env.CLIENT_URL,"https://short-ai-add-tycr.vercel.app/"],
     credentials:true,
     methods:["GET","POST","PUT","DELETE"],
     allowedHeaders:["Content-Type","Authorization"]
