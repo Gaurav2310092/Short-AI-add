@@ -18,10 +18,9 @@ app.use(cors({
   origin: function (origin, callback) {
     const allowedOrigins = [
       "http://localhost:5173",
-      "https://short-add.vercel.app", // 👈 your frontend
+      "https://short-ai-add-tycv.vercel.app"
     ];
 
-    // allow requests with no origin (like Clerk webhooks / curl)
     if (!origin) return callback(null, true);
 
     if (allowedOrigins.includes(origin)) {
@@ -32,6 +31,8 @@ app.use(cors({
   },
   credentials: true,
 }));
+
+app.options("*", cors()); // ✅ handle preflight requests
 
 app.post('/api/clerk',express.raw({ type: 'application/json' }),clerkwebHooks)
 
