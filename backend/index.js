@@ -32,7 +32,11 @@ app.use(cors({
   credentials: true,
 }));
 
-app.options("*", cors()); // ✅ handle preflight requests
+app.use((req, res, next) => {
+  if (req.method === "OPTIONS") return res.sendStatus(200);
+  next();
+});
+
 
 app.post('/api/clerk',express.raw({ type: 'application/json' }),clerkwebHooks)
 
