@@ -14,6 +14,17 @@ const app=express();
 connectToMongoDB(process.env.MONGODB_URI);
 
 //Middleware
+
+
+app.use((req, res, next) => {
+  if (req.method === "OPTIONS") return res.sendStatus(200);
+  next();
+});
+
+
+app.post('/api/clerk',express.raw({ type: 'application/json' }),clerkwebHooks)
+
+
 app.use(cors({
   origin: function (origin, callback) {
     const allowedOrigins = [
@@ -31,14 +42,6 @@ app.use(cors({
   },
   credentials: true,
 }));
-
-app.use((req, res, next) => {
-  if (req.method === "OPTIONS") return res.sendStatus(200);
-  next();
-});
-
-
-app.post('/api/clerk',express.raw({ type: 'application/json' }),clerkwebHooks)
 
 app.use(express.json());
 app.use(clerkMiddleware());
