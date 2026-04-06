@@ -106,7 +106,7 @@ async function createProject(req, res) {
         console.log("Step 1: Analyzing images...");
 
         const visionResponse = await ai.models.generateContent({
-            model: "gemini-2.5-flash",
+            model: "gemini-3.1-flash-lite-preview",
             contents: [
                 {
                     role: "user",
@@ -170,7 +170,7 @@ async function createProject(req, res) {
         `;
 
         const imageResponse = await ai.models.generateContent({
-            model: "gemini-2.5-flash-image",
+            model: "gemini-3.1-flash-image-preview",
             contents: [
                 {
                     role: "user",
