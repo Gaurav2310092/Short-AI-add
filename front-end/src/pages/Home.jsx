@@ -7,8 +7,10 @@ import SectionTitle from "../components/SectionTitle";
 import { useThemeContext } from "../context/ThemeContext";
 import { FaqSection } from "../sections/FaqSection";
 import Pricing from "../sections/Pricing";
+import {useNavigate, usenavigate} from 'react-router-dom'
 
 export default function Page() {
+    const navigate=useNavigate();
     const { theme } = useThemeContext();
     return (
         <>
@@ -35,10 +37,10 @@ export default function Page() {
                     Upload product images and a model photo - our AI instantly produces professsional lifestyle imagenry and short-form videos optimised for commercials & Reels.
                 </p>
                 <div className="flex items-center gap-4 mt-8">
-                    <button className="bg-purple-600 hover:bg-purple-700 transition text-white rounded-md px-6 h-11">
+                    <button className="bg-purple-600 hover:bg-purple-700 transition text-white rounded-md px-6 h-11" onClick={()=> navigate('/generate')}>
                         Start Generating - it's free
                     </button>
-                    <button className="flex items-center gap-2 border border-purple-900 transition text-slate-600 dark:text-white rounded-md px-6 h-11">
+                    <button className="flex items-center gap-2 border border-purple-900 transition text-slate-600 dark:text-white rounded-md px-6 h-11" onClick={()=> navigate('/community')}>
                         <VideoIcon strokeWidth={1} />
                         <span>Watch demo</span>
                     </button>
